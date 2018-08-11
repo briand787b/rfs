@@ -1,8 +1,8 @@
-package server
+package app
 
-// Store is the interface that covers the management
+// ServerStore is the interface that covers the management
 // of the persistence layer for the servers
-type Store interface {
+type ServerStore interface {
 	AddServer(*Server) error
 	RemoveServer(string) error
 	GetAllServers() []*Server

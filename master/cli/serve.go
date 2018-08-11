@@ -20,21 +20,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// registerCmd represents the register command
-var registerCmd = &cobra.Command{
-	Use:   "register",
-	Short: "Register this remote server with master",
-	Long: `register sends a request to the cluster
-	master to add this server to its server list.
-	If successful, this server will become a remote
-	instance managed by the master server.`,
+// serveCmd represents the serve command
+var serveCmd = &cobra.Command{
+	Use:   "serve",
+	Short: "Serve HTTP requests from master",
+	Long: `serve Serves HTTP requests from the 
+	master instance.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("register called")
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(registerCmd)
+	rootCmd.AddCommand(serveCmd)
 
 	// Here you will define your flags and configuration settings.
 

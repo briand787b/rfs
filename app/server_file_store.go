@@ -1,4 +1,4 @@
-package server
+package app
 
 import (
 	"encoding/json"
@@ -19,7 +19,7 @@ var (
 	ErrServerNotFound = errors.New("Server does not exist in store")
 )
 
-// fileStore implements the Store
+// fileStore implements the ServerStore
 // interface with flat file storage in JSON
 //
 // The file which persists data will only
@@ -32,8 +32,8 @@ var (
 type fileStore map[string]*Server
 
 // NewFileStore sets up and returns a new
-// Store using flat file storage
-func NewFileStore() (Store, error) {
+// ServerStore using flat file storage
+func NewFileStore() (ServerStore, error) {
 	return newFileStore(serversPath)
 }
 

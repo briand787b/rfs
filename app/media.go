@@ -18,8 +18,18 @@ type Media struct {
 	files    []*os.File
 }
 
-func NewLocalMedia() *Media {
+// // NewLocalMedia takes the filename of an external
+// // file  (external to the working dir of the server)
+// // and
+// func NewLocalMedia(filename string) *Media {
+// 	// open external file
+// 	xf, err := os.Open(filename)
+// 	if err != nil {
+// 		return errors.Wrap(err,
+// 			"could not open external file",
+// 		)
+// 	}
 
-}
+// }
 
 // func (m *Media)

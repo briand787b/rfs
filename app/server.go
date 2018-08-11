@@ -21,6 +21,7 @@ type Server struct {
 //
 // NEEDS TO BE DIFFERENTIATED BTWN LOCAL AND REMOTE
 func NewServer(name, ip, dir string) *Server {
+
 	return &Server{
 		Name:       name,
 		IP:         ip,

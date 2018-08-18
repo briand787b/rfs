@@ -1,4 +1,4 @@
-// Copyright © 2018 Brian D'Ostilio <briand787b@gmail.com>
+// Copyright © 2018 Brian D'Ostilio briand787b@gmail.com
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@ package cli
 import (
 	"fmt"
 
+	"github.com/briand787b/rfs/master/api/http"
+
 	"github.com/spf13/cobra"
 )
 
@@ -27,7 +29,8 @@ var serveCmd = &cobra.Command{
 	Long: `serve Serves HTTP requests from the 
 	master instance.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("register called")
+		fmt.Println("serve called")
+		http.Serve()
 	},
 }
 

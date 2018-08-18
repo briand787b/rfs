@@ -1,4 +1,4 @@
-// Copyright © 2018 NAME HERE <EMAIL ADDRESS>
+// Copyright © 2018 Brian D'Ostilio briand787b@gmail.com
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	cmdM "github.com/briand787b/rfs/master/cli"
@@ -32,6 +31,4 @@ func main() {
 	} else {
 		cmdR.Execute()
 	}
-
-	fmt.Println("Hello world")
 }

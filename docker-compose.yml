@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  server:
+    env_file:
+      - DB.env
+    build: .
+    command: serve
+    ports:
+      - "80:8080"
+    depends_on:
+      - db
+    
+  db:
+    image: postgres:10.5
+    volumes:
+      - rfs_db_data:/var/lib/postgresql/data
+
+volumes:
+  rfs_db_data:
+    external: true
+  

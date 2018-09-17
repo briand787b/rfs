@@ -11,6 +11,7 @@ import (
 )
 
 const (
+	dbHostEnvVar = "RFS_DATABASE_HOST"
 	dbNameEnvVar = "RFS_DATABASE_NAME"
 	dbUserEnvVar = "RFS_DATABASE_USER"
 	dbPassEnvVar = "RFS_DATABASE_PASS"
@@ -22,6 +23,11 @@ var (
 
 func init() {
 	// connect to postgresql
+	dbHost := os.Getenv(dbHostEnvVar)
+	if dbHost == "" {
+		fmt.Println("WARNING: databse host is empty")
+	}
+
 	dbName := os.Getenv(dbNameEnvVar)
 	if dbName == "" {
 		fmt.Println("WARNING: database name is empty")
@@ -37,19 +43,26 @@ func init() {
 		fmt.Println("WARNING: database password is empty")
 	}
 
-	var err error
-	if db, err = sqlx.Connect("postgres", fmt.Sprintf("sslmode=disable dbname=%s user=%s password=%s",
+	connStr := fmt.Sprintf("sslmode=disable host=%s dbname=%s user=%s password=%s",
+		dbHost,
 		dbName,
 		dbUser,
 		dbPass,
-	)); err != nil {
+	)
+
+	fmt.Println("db connection string: ", connStr)
+
+	var err error
+	if db, err = sqlx.Connect("postgres", connStr); err != nil {
 		fmt.Println("WARNING: database connection failed: ", err)
+	} else {
+		fmt.Println("connected to postgres")
 	}
 }
 
 // GetDB returns the Postgres database on which to run queries
 //
-// No need to return any TX's because any helper functions i create
+// No need to return any TX's because any helper functions I create
 // here will be redundant
 func GetDB() *sqlx.DB {
 	return db

@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	http.HandleFunc("/", handleTestModel)
+	http.HandleFunc("/", handleTestModelGetAll)
 }
 
 func handleTestModel(w http.ResponseWriter, r *http.Request) {
@@ -36,4 +36,19 @@ func handleTestModel(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// fmt.Fprintln(w, "done working")
+}
+
+func handleTestModelGetAll(w http.ResponseWriter, r *http.Request) {
+	ts, err := models.NewPostgresTestModelDBStore().GetAll()
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, "could not save test_model", http.StatusInternalServerError)
+		return
+	}
+
+	if err := json.NewEncoder(w).Encode(ts); err != nil {
+		fmt.Println(err)
+		http.Error(w, "could not encode test_models", http.StatusInternalServerError)
+		return
+	}
 }

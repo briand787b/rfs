@@ -20,6 +20,25 @@ func NewPostgresTestModelDBStore() TestModelStore {
 	}
 }
 
+func (s *testModelDBStore) GetAll() ([]TestModel, error) {
+	var tms []TestModel
+	if err := sqlx.Select(s.DB, &tms, `
+		SELECT
+			id AS ID,
+			name AS Name
+		FROM
+			test_models;`,
+	); err != nil {
+		return nil, err
+	}
+
+	if tms == nil {
+		tms = []TestModel{}
+	}
+
+	return tms, nil
+}
+
 func (s *testModelDBStore) Save(tm *TestModel) error {
 	var ids []int
 	if err := sqlx.Select(s.DB, &ids, `

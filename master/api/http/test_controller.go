@@ -38,6 +38,7 @@ func handleTestModel(w http.ResponseWriter, r *http.Request) {
 	// fmt.Fprintln(w, "done working")
 }
 
+// handleTestModelGetAll retrieves all test models from the database
 func handleTestModelGetAll(w http.ResponseWriter, r *http.Request) {
 	ts, err := models.NewPostgresTestModelDBStore().GetAll()
 	if err != nil {

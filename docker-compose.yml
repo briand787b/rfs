@@ -1,7 +1,9 @@
 version: '3'
 
 services:
-  server:
+  master:
+    environment:
+      - RFS_MASTER=TRUE
     env_file:
       - DB.env
     build: .

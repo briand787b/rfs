@@ -50,7 +50,8 @@ func init() {
 		dbPass,
 	)
 
-	fmt.Println("db connection string: ", connStr)
+	// DEBUG
+	fmt.Println("DEBUG: db connection string: ", connStr)
 
 	var err error
 	if db, err = sqlx.Connect("postgres", connStr); err != nil {

@@ -4,9 +4,9 @@ RUN apt-get update && apt-get upgrade -y
 
 WORKDIR /go/src/github.com/briand787b/rfs
 
-COPY . .
-
 EXPOSE 8080
+
+COPY . .
 
 RUN go install
 

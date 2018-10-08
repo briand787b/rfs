@@ -8,12 +8,7 @@ import (
 	"github.com/briand787b/rfs/app/models"
 )
 
-func init() {
-	http.HandleFunc("/", handleTestModelGetAll)
-}
-
 func handleTestModel(w http.ResponseWriter, r *http.Request) {
-	// fmt.Fprintln(w, "started working")
 	var testModel models.TestModel
 
 	defer r.Body.Close()

@@ -5,7 +5,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 
-	"github.com/briand787b/rfs/app/postgres"
+	"github.com/briand787b/rfs/core/postgres"
 )
 
 type testModelDBStore struct {

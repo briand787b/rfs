@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/briand787b/rfs/app/models"
+	"github.com/go-chi/render"
+
+	"github.com/briand787b/rfs/core/models"
 )
 
 func handleTestModel(w http.ResponseWriter, r *http.Request) {
@@ -42,7 +44,7 @@ func handleTestModelGetAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := json.NewEncoder(w).Encode(ts); err != nil {
+	if err := render.RenderList(w, r, NewTestModelListResponse(ts)); err != nil {
 		fmt.Println(err)
 		http.Error(w, "could not encode test_models", http.StatusInternalServerError)
 		return

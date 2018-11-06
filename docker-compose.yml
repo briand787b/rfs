@@ -14,11 +14,12 @@ services:
       - db
     
   db:
-    image: postgres:10.5
+    env_file:
+      - database/DB.env
+    build: database
     volumes:
       - rfs_db_data:/var/lib/postgresql/data
 
 volumes:
   rfs_db_data:
-    external: true
   

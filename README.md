@@ -41,11 +41,10 @@ This application defines the term 'media' (ignoring correct singularization) to
 represent a grouping of any number of entertainment artifacts that can be 
 logically organized into a single entity.  Organization of media is hierarchical
 and one media may be considered a 'parent' to zero or more media and a 'child' 
-of exactly one media (unless it is basal to its hierarchy tree, in which case it
-has no parent).  Although the logical grouping of digitial files is arbitrary, 
-most media will be represented exactly as they are obtained from their source.
-For example, a TV show can be represented in the data layer of this application
-like so:
+of exactly one media (unless it is basal to its hierarchy tree).  Although the 
+logical grouping of digitial files is arbitrary, most media will be represented 
+exactly as they are obtained from their source. For example, a TV show can be 
+represented in the data layer of this application like so:
 ```
 TV Shows -> Show X -> Season 1 -> Episode 1
                  |           | -> Episode 2
@@ -80,7 +79,7 @@ that contains episode 1 of Show X's first season would be in the Episode_1 folde
 ```
 ${RFS_WORKING_DIR}/TV_Shows/Show_X/Season_1/Episode_1/episode_1.mp4
 ```
-'Episode_1', and so Episode_1 would contain the checksum of this file for data
+'Episode_1', and so Episode_1 would contain the checksum of this file for data.
 The file 'episode_1.mp4' would obviously be the feature file for the media named
 validation.  Other files may be associated with this media, including subtitles
 (.srt files) or artwork, but these files must not hold equal importance to the

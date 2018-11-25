@@ -6,5 +6,5 @@ package models
 type FileStore interface {
 	GetByID(int) (*File, error)
 	Save(*File) error
-	GetMedia(*File) (*Media, error)
+	Delete(int) error
 }

@@ -15,6 +15,7 @@ const (
 	dbNameEnvVar = "RFS_DATABASE_NAME"
 	dbUserEnvVar = "RFS_DATABASE_USER"
 	dbPassEnvVar = "RFS_DATABASE_PASS"
+	dbPortEnvVar = "RFS_DATABASE_PORT"
 )
 
 var (
@@ -43,11 +44,17 @@ func init() {
 		fmt.Println("WARNING: database password is empty")
 	}
 
-	connStr := fmt.Sprintf("sslmode=disable host=%s dbname=%s user=%s password=%s",
+	dbPort := os.Getenv(dbPortEnvVar)
+	if dbPort == "" {
+		fmt.Println("WARNING: database port is empty")
+	}
+
+	connStr := fmt.Sprintf("sslmode=disable host=%s dbname=%s user=%s password=%s port=%s",
 		dbHost,
 		dbName,
 		dbUser,
 		dbPass,
+		dbPort,
 	)
 
 	// DEBUG

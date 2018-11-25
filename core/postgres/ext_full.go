@@ -11,6 +11,7 @@ import (
 // and executing functions of the sqlx package.  It is satisfied
 // by the sqlx.DB type.
 type ExtFull interface {
+	binder
 	sqlx.Execer
 	sqlx.ExecerContext
 	sqlx.Queryer
@@ -25,11 +26,13 @@ func GetExtFull(logOut io.Writer) ExtFull {
 
 	l := log.New(logOut, "[QUERY] ", log.LstdFlags)
 	return struct {
+		binder
 		sqlx.Execer
 		sqlx.ExecerContext
 		sqlx.Queryer
 		sqlx.QueryerContext
 	}{
+		db,
 		&execLogger{
 			logger: l,
 			execer: db,

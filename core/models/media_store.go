@@ -5,4 +5,5 @@ package models
 type MediaStore interface {
 	GetByID(int) (*Media, error)
 	Save(*Media) error
+	Delete(int) error
 }

@@ -134,6 +134,7 @@ CREATE TABLE servers (
     local_ip VARCHAR(15) NOT NULL,
     is_master BOOLEAN NOT NULL,
     max_storage_bytes BIGINT NOT NULL,
+    working_dir VARCHAR(100) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

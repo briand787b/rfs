@@ -3,6 +3,8 @@ package postgres
 import (
 	"fmt"
 	"os"
+	"sync"
+	"time"
 
 	"github.com/jmoiron/sqlx"
 
@@ -20,9 +22,11 @@ const (
 
 var (
 	db *sqlx.DB
+
+	connectOnce = &sync.Once{}
 )
 
-func init() {
+func connect() {
 	// connect to postgresql
 	dbHost := os.Getenv(dbHostEnvVar)
 	if dbHost == "" {
@@ -61,11 +65,24 @@ func init() {
 	fmt.Println("DEBUG: db connection string: ", connStr)
 
 	var err error
-	if db, err = sqlx.Connect("postgres", connStr); err != nil {
-		fmt.Println("WARNING: database connection failed: ", err)
-	} else {
-		fmt.Println("connected to postgres")
+	if db, err = sqlx.Connect("postgres", connStr); err == nil {
+		fmt.Println("connected to postgres!")
+		return
 	}
+
+	go func() {
+		for {
+			if db, err = sqlx.Connect("postgres", connStr); err == nil {
+				fmt.Println("connected to postgres!")
+				return
+			}
+
+			fmt.Println("WARNING: database connection failed: ", err)
+			time.Sleep(50 * time.Millisecond)
+			fmt.Println("retrying...")
+		}
+	}()
+
 }
 
 // GetDB returns the Postgres database on which to run queries
@@ -73,5 +90,6 @@ func init() {
 // No need to return any TX's because any helper functions I create
 // here will be redundant
 func GetDB() *sqlx.DB {
+	connectOnce.Do(connect)
 	return db
 }

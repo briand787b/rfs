@@ -20,6 +20,8 @@ type ExtFull interface {
 
 // GetExtFull returns an implementation of ExtFull that uses postgres
 func GetExtFull(logOut io.Writer) ExtFull {
+	connectOnce.Do(connect)
+
 	if logOut == nil {
 		return db
 	}

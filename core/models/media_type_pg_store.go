@@ -1,7 +1,7 @@
 package models
 
 import (
-	"os"
+	"fmt"
 
 	"github.com/briand787b/rfs/core/postgres"
 
@@ -14,11 +14,14 @@ type mediaTypePGStore struct {
 }
 
 // NewMediaTypePGStore returns a MediaTypeStore backed by Postgresql
-func NewMediaTypePGStore(db *sqlx.DB) MediaTypeStore {
-	return &mediaTypePGStore{db: postgres.GetExtFull(os.Stdout)}
+func NewMediaTypePGStore(db postgres.ExtFull) MediaTypeStore {
+	return &mediaTypePGStore{db: db}
 }
 
 func (mtps *mediaTypePGStore) GetByID(id int) (*MediaType, error) {
+	// delete me
+	fmt.Println("DEBUG: in mediaTypePGStore.GetByID")
+
 	var mtRec MediaType
 	if err := sqlx.Get(mtps.db, &mtRec, `
 		SELECT
@@ -29,9 +32,11 @@ func (mtps *mediaTypePGStore) GetByID(id int) (*MediaType, error) {
 			id = $1;`,
 		id,
 	); err != nil {
+		fmt.Println("error: ", err)
 		return nil, errors.Wrap(err, "failed to execute query")
 	}
 
+	fmt.Println("NO ERROR")
 	return &mtRec, nil
 }
 

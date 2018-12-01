@@ -13,23 +13,26 @@ services:
     depends_on:
       - db
 
-  worker:
-    env_file:
-      - DB.env
-    build: .
-    command: serve
-    ports:
-      - "80:8080"
-    depends_on:
-      - db
+  # worker:
+  #   env_file:
+  #     - DB.env
+  #   build: .
+  #   command: serve
+  #   ports:
+  #     - "80:8080"
+  #   depends_on:
+  #     - db
 
   db:
     env_file:
       - database/DB.env
     build: database
+    restart: always
+    ports:
+      - "2345:5432"
     volumes:
-      - rfs_db_data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
 
 volumes:
-  rfs_db_data:
+  db_data:
   

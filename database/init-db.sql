@@ -347,13 +347,15 @@ VALUES
 -- All basal media (media without parents) will be owned by the Community user.
 -- Thus, users can add media that are children to the basal media without owning the basal media
 -- The application should NOT allow the creation of basal media after initialization
-
-
--- All infrastructure that the master process runs on MUST be owned by the Admin user 
 -- As a general rule, content can only be added or removed on a server by its owner (e.g. admin and actual owner)
 --      e.g. rfs detects there are files missing from a server and asks
 --      the user for permission to download those files to regain sync
 
+
+-- All infrastructure that the master process runs on MUST be owned by the Admin user 
+-- /\ May not be necessary since the app server should not be storing files
+
+-- 
 
 -- For syncing, out of sync status is only detected for media when the server already holds 
 --      at least one child media

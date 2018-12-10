@@ -2,10 +2,10 @@ package http
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
+
+	"github.com/briand787b/rfs/core/log"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
@@ -14,11 +14,13 @@ import (
 )
 
 type mediaTypeController struct {
+	l   log.Logger
 	mts models.MediaTypeStore
 }
 
-func newMediaTypeController(mts models.MediaTypeStore) *mediaTypeController {
+func newMediaTypeController(mts models.MediaTypeStore, l log.Logger) *mediaTypeController {
 	return &mediaTypeController{
+		l:   l,
 		mts: mts,
 	}
 }
@@ -49,19 +51,11 @@ func (mtc mediaTypeController) mediaTypeCtx(next http.Handler) http.Handler {
 }
 
 func (mtc mediaTypeController) handleMediaTypeGetByID(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("IN MEDIA TYPE CONTROLLER")
-	fmt.Printf("MEDIA TYPE STORE: %v\n", mtc.mts)
 	mt, ok := r.Context().Value(mediaTypeCtxKey).(*models.MediaType)
 	if !ok {
-		http.Error(w, "could not find media_type_id from url", http.StatusBadRequest)
+		render.Render(w, r, ErrNotFound)
 		return
 	}
 
-	bs, err := json.Marshal(mt)
-	if err != nil {
-		fmt.Println(err)
-		http.Error(w, "error marshalling MediaType to JSON", http.StatusInternalServerError)
-	}
-
-	w.Write(bs)
+	render.Render(w, r, NewMediaTypeResponse(mt))
 }

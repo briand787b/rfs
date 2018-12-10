@@ -7,6 +7,7 @@ import (
 )
 
 // Error response payloads & renderers
+var ErrNotFound = &ErrResponse{HTTPStatusCode: 404, StatusText: "Resource not found."}
 
 // ErrResponse renderer type for handling all sorts of errors.
 //
@@ -44,5 +45,3 @@ func ErrRender(err error) render.Renderer {
 		ErrorText:      err.Error(),
 	}
 }
-
-var ErrNotFound = &ErrResponse{HTTPStatusCode: 404, StatusText: "Resource not found."}

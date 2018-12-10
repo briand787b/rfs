@@ -22,6 +22,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var env string
+
 // serveCmd represents the serve command
 var serveCmd = &cobra.Command{
 	Use:   "serve",
@@ -30,12 +32,14 @@ var serveCmd = &cobra.Command{
 	master instance.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("serve called")
-		http.Serve()
+		http.Serve(env)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(serveCmd)
+
+	serveCmd.PersistentFlags().StringVar(&env, "env", "development", "env (assumes 'development' unless told 'production'")
 
 	// Here you will define your flags and configuration settings.
 

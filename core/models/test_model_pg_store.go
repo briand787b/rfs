@@ -1,7 +1,7 @@
 package models
 
 import (
-	"os"
+	"github.com/briand787b/rfs/core/log"
 
 	"github.com/jmoiron/sqlx"
 
@@ -9,14 +9,16 @@ import (
 )
 
 type testModelDBStore struct {
+	l  log.Logger
 	DB postgres.ExtFull
 }
 
 // NewPostgresTestModelDBStore instantiates a new TestModelStore implemented
 // by a postgresql database
-func NewPostgresTestModelDBStore() TestModelStore {
+func NewPostgresTestModelDBStore(l log.Logger) TestModelStore {
 	return &testModelDBStore{
-		DB: postgres.GetExtFull(os.Stdout),
+		l:  l,
+		DB: postgres.GetExtFull(l),
 	}
 }
 

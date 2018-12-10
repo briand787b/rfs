@@ -1,0 +1,279 @@
+{
+	"info": {
+		"_postman_id": "5e5cdc9a-d256-45e0-9e76-4b9db7d06183",
+		"name": "rfs master",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "v1.0",
+			"item": [
+				{
+					"name": "Authenticated",
+					"item": [
+						{
+							"name": "test models",
+							"item": [
+								{
+									"name": "get testmodels",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMjN9._dAziMU7HCMpsuJ-Lh-54Y1cPGdzGLQd8eK_-i99GDg",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "localhost/{{version}}/testmodels",
+											"host": [
+												"localhost"
+											],
+											"path": [
+												"{{version}}",
+												"testmodels"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "create testmodels",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"name\": \"tia\"\n}"
+										},
+										"url": {
+											"raw": "localhost/testmodels",
+											"host": [
+												"localhost"
+											],
+											"path": [
+												"testmodels"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "get root",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Unauthenticated",
+					"item": [
+						{
+							"name": "Media Types",
+							"item": [
+								{
+									"name": "Get MediaType By ID (1)",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "localhost/{{version}}/media_types/1",
+											"host": [
+												"localhost"
+											],
+											"path": [
+												"{{version}}",
+												"media_types",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get MediaType By ID (2)",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "localhost/{{version}}/media_types/2",
+											"host": [
+												"localhost"
+											],
+											"path": [
+												"{{version}}",
+												"media_types",
+												"2"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "83cd22df-760f-4dc5-9300-d8cec40dc0b2",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "82c83316-ff8d-4f06-abf7-9481c02370b3",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Auth",
+							"item": [
+								{
+									"name": "Login",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "localhost/v1.0/login",
+											"host": [
+												"localhost"
+											],
+											"path": [
+												"v1.0",
+												"login"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "c0157ce5-ade9-4724-ae53-dd549b506ba1",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "b298fcae-6bc5-41ea-92b6-4a4eadec48a6",
+										"type": "text/javascript",
+										"exec": [
+											"// var jsonData = JSON.parse(responseBody);",
+											"// postman.setEnvironmentVariable(\"media_type\", jsonData.name);",
+											"",
+											"pm.environment.set(\"token\", pm.response.headers.get(\"Authorization\"));"
+										]
+									}
+								}
+							],
+							"_postman_isSubFolder": true
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			],
+			"description": "All v1.0 routes",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "a0472ef5-09bc-4e20-b07c-ae7de92bb86e",
+						"type": "text/javascript",
+						"exec": [
+							"pm.environment.set(\"version\", \"v1.0\")"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "b7dd63bb-2d69-4180-ab43-ada3f1ec3b0d",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "a6e1d9dc-5c21-4635-aa15-d461293f4eac",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "97a74b7d-69a7-4397-b331-c72464e5faf4",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

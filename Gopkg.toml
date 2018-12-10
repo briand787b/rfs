@@ -60,3 +60,15 @@
 [[constraint]]
   name = "github.com/pkg/errors"
   version = "0.8.0"
+
+[[constraint]]
+  name = "github.com/go-chi/jwtauth"
+  version = "4.0.0"
+
+[[constraint]]
+  name = "github.com/dgrijalva/jwt-go"
+  version = "3.2.0"
+
+[[constraint]]
+  name = "go.uber.org/zap"
+  version = "1.9.1"

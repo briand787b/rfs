@@ -1,8 +1,7 @@
 package postgres
 
 import (
-	"io"
-	"log"
+	"github.com/briand787b/rfs/core/log"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -19,14 +18,9 @@ type ExtFull interface {
 }
 
 // GetExtFull returns an implementation of ExtFull that uses postgres
-func GetExtFull(logOut io.Writer) ExtFull {
+func GetExtFull(l log.Logger) ExtFull {
 	connectOnce.Do(connect)
 
-	if logOut == nil {
-		return db
-	}
-
-	l := log.New(logOut, "[QUERY] ", log.LstdFlags)
 	return struct {
 		binder
 		sqlx.Execer

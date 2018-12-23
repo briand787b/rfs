@@ -60,7 +60,6 @@ func (mtps *mediaTypePGStore) GetAll(ctx context.Context, skip int, take int) ([
 		skip,
 		take,
 	); err != nil {
-		mtps.l.Error("failed to execute query", err)
 		return nil, errors.Wrap(err, "failed to execute query")
 	}
 
@@ -68,9 +67,9 @@ func (mtps *mediaTypePGStore) GetAll(ctx context.Context, skip int, take int) ([
 	return mts, nil
 }
 
-func (mtps *mediaTypePGStore) Insert(mt *MediaType) error {
+func (mtps *mediaTypePGStore) Insert(ctx context.Context, mt *MediaType) error {
 	var saveID int
-	if err := sqlx.Get(mtps.db, &saveID, `
+	if err := sqlx.GetContext(ctx, mtps.db, &saveID, `
 		INSERT INTO media_types
 		(
 			name

@@ -6,7 +6,8 @@ import "context"
 type MediaTypeStore interface {
 	GetByID(int) (*MediaType, error)
 	GetAll(context.Context, int, int) ([]MediaType, error)
-	Insert(*MediaType) error
+	// delete these once the patterns have been applied elsewhere - media types are static
+	Insert(context.Context, *MediaType) error
 	Update(*MediaType) error
 	Delete(int) error
 }

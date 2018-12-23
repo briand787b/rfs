@@ -7,6 +7,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/briand787b/rfs/core/rfslog"
+
 	"github.com/go-chi/render"
 
 	"github.com/pkg/errors"
@@ -19,6 +21,10 @@ const jwtSecretEnvVar = "JWT_SECRET"
 
 // extract this as well as the init
 var tokenAuth *jwtauth.JWTAuth
+
+type AuthController struct {
+	l rfslog.Logger
+}
 
 func setSecret() {
 	secret := os.Getenv(jwtSecretEnvVar)
@@ -46,9 +52,9 @@ func setToken(w http.ResponseWriter) error {
 	return nil
 }
 
-func handleLogin(w http.ResponseWriter, r *http.Request) {
+func (ac *AuthController) handleLogin(w http.ResponseWriter, r *http.Request) {
 	if err := setToken(w); err != nil {
 		// obviously this is not right and should be changed in the future
-		render.Render(w, r, ErrNotFound)
+		render.Render(w, r, ErrInternalServer(ac.l, err))
 	}
 }

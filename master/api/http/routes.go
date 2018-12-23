@@ -36,7 +36,11 @@ func Serve(lvl string) error {
 	// initialize stores
 	mts := models.NewMediaTypePGStore(l, db)
 
+	// initialize middlewares
+	mw := &Middleware{l: l}
+
 	// initialize controllers
+	ac := &AuthController{l: l}
 	mtc := newMediaTypeController(mts, l)
 
 	// initialize router
@@ -49,10 +53,11 @@ func Serve(lvl string) error {
 	// v1.0 router
 	r.Route("/v1.0", func(r chi.Router) {
 		// unauthenticated routes
-		r.Post("/login", handleLogin)
+		r.Post("/login", ac.handleLogin)
 
 		r.Route("/media_types", func(r chi.Router) {
-			r.With(skipTake).Get("/", mtc.handleGetAllMediaTypes)
+			r.With(mw.skipTake).Get("/", mtc.handleGetAllMediaTypes)
+			r.Post("/", mtc.handleCreate)
 			r.Route("/{media_type_id}", func(r chi.Router) {
 				r.Use(mtc.mediaTypeCtx)
 				r.Get("/", mtc.handleMediaTypeGetByID)

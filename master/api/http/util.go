@@ -1,11 +1,9 @@
 package http
 
 import (
-	"context"
 	"net/http"
 	"strconv"
 
-	"github.com/go-chi/render"
 	"github.com/pkg/errors"
 )
 
@@ -49,24 +47,4 @@ func getTake(r *http.Request) (int, error) {
 	}
 
 	return tI, nil
-}
-
-func skipTake(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		s, err := getSkip(r)
-		if err != nil {
-			render.Render(w, r, ErrNotFound) // NOTE: THIS IS NOT THE CORRECT RESPONSE, JUST TESTING...
-			return
-		}
-
-		t, err := getTake(r)
-		if err != nil {
-			render.Render(w, r, ErrNotFound) // NOTE: THIS IS NOT THE CORRECT RESPONSE, JUST TESTING...
-			return
-		}
-
-		ctx := context.WithValue(r.Context(), skipCtxKey, s)
-		ctx = context.WithValue(ctx, takeCtxKey, t)
-		next.ServeHTTP(w, r.WithContext(ctx))
-	})
 }

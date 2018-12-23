@@ -10,7 +10,7 @@ import (
 // Logger is any type that is capable of logging rfs application output
 type Logger interface {
 	Debugw(msg string, keysAndValues ...interface{})
-	Error(msg string, err error)
+	ShortError(err error)
 	Errorw(msg string, keysAndValues ...interface{})
 	// Info(args ...interface{})
 	Infow(msg string, keysAndValues ...interface{})
@@ -51,8 +51,14 @@ func NewZapSugaredLogger(lvl string) (Logger, error) {
 	return &zl, nil
 }
 
-func (zl *zapLogger) Error(msg string, err error) {
-	zl.Errorw(msg,
-		"StackTrace", fmt.Sprintf("%+s", err),
+// func (zl *zapLogger) Error(msg string, err error) {
+// 	zl.Errorw(msg,
+// 		"StackTrace", fmt.Sprintf("%+s", err),
+// 	)
+// }
+
+func (zl *zapLogger) ShortError(err error) {
+	zl.Errorw("[ERROR]",
+		"error", fmt.Errorf("shorthand error: %s", err),
 	)
 }

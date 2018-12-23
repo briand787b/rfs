@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/go-chi/render"
 
@@ -33,6 +34,7 @@ func setToken(w http.ResponseWriter) error {
 	// a sample jwt token with claims `user_id:123` here:
 	_, tokenString, err := tokenAuth.Encode(jwt.MapClaims{
 		"user_id": 123,
+		"exp":     time.Now().Add(60 * time.Minute).Unix(),
 	})
 
 	if err != nil {
@@ -45,8 +47,6 @@ func setToken(w http.ResponseWriter) error {
 }
 
 func handleLogin(w http.ResponseWriter, r *http.Request) {
-	log.Println("IN handleLogin METHOD")
-
 	if err := setToken(w); err != nil {
 		// obviously this is not right and should be changed in the future
 		render.Render(w, r, ErrNotFound)

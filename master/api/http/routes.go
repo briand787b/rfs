@@ -7,9 +7,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/briand787b/rfs/core/log"
 	"github.com/briand787b/rfs/core/models"
 	"github.com/briand787b/rfs/core/postgres"
+	"github.com/briand787b/rfs/core/rfslog"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -22,7 +22,7 @@ import (
 // Serve runs the master API server, blocking until a termination
 // signal is received
 func Serve(lvl string) error {
-	l, err := log.NewZapSugaredLogger(lvl)
+	l, err := rfslog.NewZapSugaredLogger(lvl)
 	if err != nil {
 		return errors.Wrap(err, "could not instantiate new zap sugared logger")
 	}
@@ -34,7 +34,7 @@ func Serve(lvl string) error {
 	db := postgres.GetExtFull(l)
 
 	// initialize stores
-	mts := models.NewMediaTypePGStore(db)
+	mts := models.NewMediaTypePGStore(l, db)
 
 	// initialize controllers
 	mtc := newMediaTypeController(mts, l)
@@ -52,6 +52,7 @@ func Serve(lvl string) error {
 		r.Post("/login", handleLogin)
 
 		r.Route("/media_types", func(r chi.Router) {
+			r.With(skipTake).Get("/", mtc.handleGetAllMediaTypes)
 			r.Route("/{media_type_id}", func(r chi.Router) {
 				r.Use(mtc.mediaTypeCtx)
 				r.Get("/", mtc.handleMediaTypeGetByID)
@@ -60,15 +61,15 @@ func Serve(lvl string) error {
 
 		// authenticated routes
 		r.Group(func(r chi.Router) {
-			r.Route("/testmodels", func(c chi.Router) {
-				// Seek, verify and validate JWT tokens
-				r.Use(jwtauth.Verifier(tokenAuth))
+			// Seek, verify and validate JWT tokens
+			r.Use(jwtauth.Verifier(tokenAuth))
 
-				// Handle valid / invalid tokens. In this example, we use
-				// the provided authenticator middleware, but you can write your
-				// own very easily, look at the Authenticator method in jwtauth.go
-				// and tweak it, its not scary.
-				r.Use(jwtauth.Authenticator)
+			// Handle valid / invalid tokens. In this example, we use
+			// the provided authenticator middleware, but you can write your
+			// own very easily, look at the Authenticator method in jwtauth.go
+			// and tweak it, its not scary.
+			r.Use(jwtauth.Authenticator)
+			r.Route("/testmodels", func(c chi.Router) {
 				c.Get("/", handleTestModelGetAll)
 				c.Post("/", handleTestModel)
 			})

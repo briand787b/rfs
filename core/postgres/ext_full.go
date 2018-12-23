@@ -1,8 +1,7 @@
 package postgres
 
 import (
-	"github.com/briand787b/rfs/core/log"
-
+	"github.com/briand787b/rfs/core/rfslog"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -18,7 +17,7 @@ type ExtFull interface {
 }
 
 // GetExtFull returns an implementation of ExtFull that uses postgres
-func GetExtFull(l log.Logger) ExtFull {
+func GetExtFull(l rfslog.Logger) ExtFull {
 	connectOnce.Do(connect)
 
 	return struct {

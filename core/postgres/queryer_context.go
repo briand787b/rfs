@@ -4,13 +4,12 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/briand787b/rfs/core/log"
-
+	"github.com/briand787b/rfs/core/rfslog"
 	"github.com/jmoiron/sqlx"
 )
 
 type queryContextLogger struct {
-	logger         log.Logger
+	logger         rfslog.Logger
 	queryerContext sqlx.QueryerContext
 }
 

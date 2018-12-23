@@ -1,7 +1,10 @@
 package models
 
 import (
+	"context"
 	"fmt"
+
+	"github.com/briand787b/rfs/core/rfslog"
 
 	"github.com/briand787b/rfs/core/postgres"
 
@@ -10,12 +13,13 @@ import (
 )
 
 type mediaTypePGStore struct {
+	l  rfslog.Logger
 	db postgres.ExtFull
 }
 
 // NewMediaTypePGStore returns a MediaTypeStore backed by Postgresql
-func NewMediaTypePGStore(db postgres.ExtFull) MediaTypeStore {
-	return &mediaTypePGStore{db: db}
+func NewMediaTypePGStore(l rfslog.Logger, db postgres.ExtFull) MediaTypeStore {
+	return &mediaTypePGStore{l: l, db: db}
 }
 
 func (mtps *mediaTypePGStore) GetByID(id int) (*MediaType, error) {
@@ -40,7 +44,31 @@ func (mtps *mediaTypePGStore) GetByID(id int) (*MediaType, error) {
 	return &mtRec, nil
 }
 
-func (mtps *mediaTypePGStore) Save(mt *MediaType) error {
+func (mtps *mediaTypePGStore) GetAll(ctx context.Context, skip int, take int) ([]MediaType, error) {
+	var mts []MediaType
+	if err := sqlx.SelectContext(ctx, mtps.db, &mts, `
+		SELECT
+			*
+		FROM
+			media_types
+		ORDER BY 
+			id
+		OFFSET 
+			$1
+		LIMIT
+			$2;`,
+		skip,
+		take,
+	); err != nil {
+		mtps.l.Error("failed to execute query", err)
+		return nil, errors.Wrap(err, "failed to execute query")
+	}
+
+	fmt.Println("NO ERROR")
+	return mts, nil
+}
+
+func (mtps *mediaTypePGStore) Insert(mt *MediaType) error {
 	var saveID int
 	if err := sqlx.Get(mtps.db, &saveID, `
 		INSERT INTO media_types
@@ -59,6 +87,10 @@ func (mtps *mediaTypePGStore) Save(mt *MediaType) error {
 
 	mt.ID = saveID
 	return nil
+}
+
+func (mtps *mediaTypePGStore) Update(mt *MediaType) error {
+	return errors.New("NOT IMPLEMENTED")
 }
 
 func (mtps *mediaTypePGStore) Delete(id int) error {

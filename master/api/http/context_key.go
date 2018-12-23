@@ -1,7 +1,7 @@
 package http
 
-type ctxKey int
+// type ctxKey int
 
-const (
-	mediaTypeCtxKey ctxKey = iota
-)
+// const (
+
+// )

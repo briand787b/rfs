@@ -1,21 +1,20 @@
 package models
 
 import (
-	"github.com/briand787b/rfs/core/log"
-
 	"github.com/jmoiron/sqlx"
 
 	"github.com/briand787b/rfs/core/postgres"
+	"github.com/briand787b/rfs/core/rfslog"
 )
 
 type testModelDBStore struct {
-	l  log.Logger
+	l  rfslog.Logger
 	DB postgres.ExtFull
 }
 
 // NewPostgresTestModelDBStore instantiates a new TestModelStore implemented
 // by a postgresql database
-func NewPostgresTestModelDBStore(l log.Logger) TestModelStore {
+func NewPostgresTestModelDBStore(l rfslog.Logger) TestModelStore {
 	return &testModelDBStore{
 		l:  l,
 		DB: postgres.GetExtFull(l),

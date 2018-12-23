@@ -1,4 +1,4 @@
-package log
+package rfslog
 
 import (
 	"fmt"
@@ -11,6 +11,7 @@ import (
 type Logger interface {
 	Debugw(msg string, keysAndValues ...interface{})
 	Error(msg string, err error)
+	Errorw(msg string, keysAndValues ...interface{})
 	// Info(args ...interface{})
 	Infow(msg string, keysAndValues ...interface{})
 	Warnw(msg string, keysAndValues ...interface{})

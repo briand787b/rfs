@@ -39,3 +39,24 @@ func (rd *MediaTypeResponse) Render(w http.ResponseWriter, r *http.Request) erro
 	rd.Elapsed = 10
 	return nil
 }
+
+type MediaTypeResponseList struct {
+	MediaTypes []models.MediaType `json:"media_types"`
+
+	Skip     int `json:"skip"`
+	Take     int `json:"take"`
+	NextSkip int `json:"next_skip"`
+}
+
+func NewMediaTypeResponseList(mts []models.MediaType, skip, take int) *MediaTypeResponseList {
+	return &MediaTypeResponseList{
+		MediaTypes: mts,
+		Skip:       skip,
+		Take:       take,
+	}
+}
+
+func (mtrl *MediaTypeResponseList) Render(w http.ResponseWriter, r *http.Request) error {
+	mtrl.NextSkip = mtrl.Skip + mtrl.Take
+	return nil
+}

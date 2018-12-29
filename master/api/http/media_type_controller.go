@@ -2,6 +2,7 @@ package http
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -39,7 +40,7 @@ func (mtc *mediaTypeController) mediaTypeCtx(next http.Handler) http.Handler {
 			return
 		}
 
-		mt, err := mtc.mts.GetByID(mtIDInt)
+		mt, err := mtc.mts.GetByID(r.Context(), mtIDInt)
 		if err != nil {
 			render.Render(w, r, ErrNotFound(mtc.l))
 			return
@@ -50,7 +51,7 @@ func (mtc *mediaTypeController) mediaTypeCtx(next http.Handler) http.Handler {
 	})
 }
 
-func (mtc *mediaTypeController) handleMediaTypeGetByID(w http.ResponseWriter, r *http.Request) {
+func (mtc *mediaTypeController) handleGetByID(w http.ResponseWriter, r *http.Request) {
 	mt, ok := r.Context().Value(mediaTypeCtxKey).(*models.MediaType)
 	if !ok {
 		render.Render(w, r, ErrNotFound(mtc.l))
@@ -60,7 +61,7 @@ func (mtc *mediaTypeController) handleMediaTypeGetByID(w http.ResponseWriter, r 
 	render.Render(w, r, NewMediaTypeResponse(mt))
 }
 
-func (mtc *mediaTypeController) handleGetAllMediaTypes(w http.ResponseWriter, r *http.Request) {
+func (mtc *mediaTypeController) handleGetAll(w http.ResponseWriter, r *http.Request) {
 	s := r.Context().Value(skipCtxKey).(int)
 	t, ok := r.Context().Value(takeCtxKey).(int)
 	if !ok {
@@ -90,10 +91,50 @@ func (mtc *mediaTypeController) handleCreate(w http.ResponseWriter, r *http.Requ
 
 	mt := data.MediaType
 	if err := mtc.mts.Insert(r.Context(), mt); err != nil {
-		render.Render(w, r, ErrInvalidRequest(mtc.l, err)) // NOTE: THIS IS NOT THE CORRECT RESPONSE, JUST TESTING...
+		render.Render(w, r, ErrInternalServer(mtc.l, err)) // NOTE: THIS IS NOT THE CORRECT RESPONSE, JUST TESTING...
 		return
 	}
 
 	render.Status(r, http.StatusCreated)
 	render.Render(w, r, NewMediaTypeResponse(mt))
+}
+
+func (mtc *mediaTypeController) handleUpdate(w http.ResponseWriter, r *http.Request) {
+	mt, ok := r.Context().Value(mediaTypeCtxKey).(*models.MediaType)
+	if !ok {
+		render.Render(w, r, ErrNotFound(mtc.l))
+		return
+	}
+	prevID := mt.ID
+
+	mtr := &MediaTypeRequest{}
+	if err := render.Bind(r, mtr); err != nil {
+		render.Render(w, r, ErrInvalidRequest(mtc.l, err))
+	}
+
+	mt = mtr.MediaType
+	mt.ID = prevID // allows API users to optionally omit id from request body
+
+	fmt.Printf("DEBUG: MediaType to save: %+v\n", mt)
+
+	if err := mtc.mts.Update(r.Context(), mt); err != nil {
+		render.Render(w, r, ErrInternalServer(mtc.l, err))
+		return
+	}
+
+	render.Status(r, http.StatusOK)
+	render.Render(w, r, NewMediaTypeResponse(mt))
+}
+
+func (mtc *mediaTypeController) handleDeleteByID(w http.ResponseWriter, r *http.Request) {
+	mt, ok := r.Context().Value(mediaTypeCtxKey).(*models.MediaType)
+	if !ok {
+		render.Render(w, r, ErrNotFound(mtc.l))
+		return
+	}
+
+	if err := mtc.mts.Delete(r.Context(), mt.ID); err != nil {
+		render.Status(r, http.StatusNoContent)
+		render.Render(w, r, nil)
+	}
 }

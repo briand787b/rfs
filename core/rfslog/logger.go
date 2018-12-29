@@ -10,7 +10,7 @@ import (
 // Logger is any type that is capable of logging rfs application output
 type Logger interface {
 	Debugw(msg string, keysAndValues ...interface{})
-	ShortError(err error)
+	// ShortError(err error)
 	Errorw(msg string, keysAndValues ...interface{})
 	// Info(args ...interface{})
 	Infow(msg string, keysAndValues ...interface{})

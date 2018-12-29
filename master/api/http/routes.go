@@ -56,11 +56,13 @@ func Serve(lvl string) error {
 		r.Post("/login", ac.handleLogin)
 
 		r.Route("/media_types", func(r chi.Router) {
-			r.With(mw.skipTake).Get("/", mtc.handleGetAllMediaTypes)
+			r.With(mw.skipTake).Get("/", mtc.handleGetAll)
 			r.Post("/", mtc.handleCreate)
 			r.Route("/{media_type_id}", func(r chi.Router) {
 				r.Use(mtc.mediaTypeCtx)
-				r.Get("/", mtc.handleMediaTypeGetByID)
+				r.Get("/", mtc.handleGetByID)
+				r.Put("/", mtc.handleUpdate)
+				r.Delete("/", mtc.handleDeleteByID)
 			})
 		})
 

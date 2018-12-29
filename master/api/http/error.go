@@ -30,18 +30,20 @@ type ErrResponse struct {
 	ErrorText  string `json:"error,omitempty"` // application-level error message, for debugging
 
 	l      rfslog.Logger
-	severe bool
+	severe bool // determines whether stack trace gets printed
 }
 
 func (e *ErrResponse) Render(w http.ResponseWriter, r *http.Request) error {
 	if e.severe {
-		fmt.Printf("ERROR IS SEVERE")
-		e.l.Errorw("[SEVERE ERROR]",
+		// fmt.Println("ERROR IS SEVERE")
+		e.l.Errorw("[SEVERE REQUEST ERROR]",
 			"error", e.Err,
 		)
 	} else {
 		fmt.Println("ERROR IS NOT SEVERE")
-		e.l.ShortError(e.Err)
+		e.l.Infow("[REQUEST ERROR]",
+			"error", e.Err.Error(),
+		)
 	}
 
 	render.Status(r, e.HTTPStatusCode)
